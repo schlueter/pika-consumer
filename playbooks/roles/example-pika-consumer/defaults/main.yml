@@ -1,0 +1,3 @@
+---
+local_repository: /tmp/pika-consumer
+pip_executable: /usr/local/lib/pyenv/versions/3.6.0/bin/pip

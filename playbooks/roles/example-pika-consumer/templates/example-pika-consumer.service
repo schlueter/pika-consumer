@@ -1,0 +1,13 @@
+[Unit]
+Description=An example pika consumer
+After=network.target
+ConditionPathExists=!/usr/local/etc/example-pika-consumer-should-not-be-run
+
+[Service]
+ExecStart={{ local_repository }}/bin/example-pika-consumer.py
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+---
+- name: Clone pika-consumer repo
+  git:
+    repo=https://github.com/schlueter/pika-consumer.git
+    dest={{ local_repository }}
+    update=no
+    accept_hostkey=yes
+
+- name: Install pika-consumer
+  pip:
+    name={{ local_repository }}
+    state=latest
+    executable={{ pip_executable }}
+
+- name: Install example-pika-consumer systemd service
+  template:
+    src=example-pika-consumer.service
+    dest=/etc/systemd/system/example-pika-consumer.service
+  when: ansible_service_mgr == 'systemd'
+
+- name: Activate example-pika-consumer systemd service
+  systemd:
+    name=example-pika-consumer
+    daemon_reload=yes
+    enabled=yes
+    state=started
+  when: ansible_service_mgr == 'systemd'
