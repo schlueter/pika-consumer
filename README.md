@@ -1,7 +1,7 @@
 # pika-consumer
 ##### Because there isn't one distributed with pika
 ---
-An easy to use pika consumer based on the example pika asynchronous consumer.
+An easy to use pika consumer based on the example pika asynchronous consumer. It probably works with versions of python besides 3.6, but it hasn't been tested.
 
 ## Use
 
