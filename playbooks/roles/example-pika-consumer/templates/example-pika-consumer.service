@@ -4,7 +4,7 @@ After=network.target
 ConditionPathExists=!/usr/local/etc/example-pika-consumer-should-not-be-run
 
 [Service]
-ExecStart={{ local_repository }}/bin/example-pika-consumer.py
+ExecStart={{ local_repository }}/bin/example-consumer.py
 Restart=on-failure
 RestartPreventExitStatus=255
 Type=simple
