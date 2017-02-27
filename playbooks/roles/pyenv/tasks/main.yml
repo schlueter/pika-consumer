@@ -56,8 +56,6 @@
   register: versions
   changed_when: no
 
-- debug: var=versions
-
 - name: Install some pythons
   command: /usr/local/lib/pyenv/bin/pyenv install {{ item }}
   environment:

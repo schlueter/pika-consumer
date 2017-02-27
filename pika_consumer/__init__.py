@@ -20,7 +20,7 @@ class Consumer(object):
 
     """
 
-    def __init__(self, amqp_url, queue, routing_key, exchange='', exchange_type='topic'):
+    def __init__(self, amqp_url, queue, routing_key, exchange='pika', exchange_type='topic'):
         """Create a new instance of the consumer class, passing in the AMQP
         URL used to connect to RabbitMQ.
 
@@ -61,7 +61,6 @@ class Consumer(object):
         """
         LOGGER.info('Connection opened, adding connection close callback')
         self._connection.add_on_close_callback(self.__on_connection_closed)
-        self.open_channel()
         LOGGER.info('Creating a new channel')
         self._connection.channel(on_open_callback=self.__on_channel_open)
 
@@ -110,7 +109,7 @@ class Consumer(object):
         """
         LOGGER.info('Channel opened, adding channel close callback')
         channel.add_on_close_callback(self.__on_channel_closed)
-        LOGGER.info('Declaring exchange %s', exchange_name)
+        LOGGER.info('Declaring exchange %s', self.exchange)
         channel.exchange_declare(self.__on_exchange_declareok,
                                        self.exchange,
                                        self.exchange_type)
@@ -139,8 +138,8 @@ class Consumer(object):
 
         """
         LOGGER.info('Exchange declared')
-        LOGGER.info('Declaring queue %s', queue_name)
-        self._channel.queue_declare(self.__on_queue_declareok, queue_name)
+        LOGGER.info('Declaring queue %s', self.queue)
+        self._channel.queue_declare(self.__on_queue_declareok, self.queue)
 
     def __on_queue_declareok(self, _):
         """Method invoked by pika when the Queue.Declare RPC call made in
@@ -172,7 +171,7 @@ class Consumer(object):
         LOGGER.info('Adding consumer cancellation callback')
         self._channel.add_on_cancel_callback(self.__on_consumer_cancelled)
         self._consumer_tag = self._channel.basic_consume(self.on_message,
-                                                         self.QUEUE)
+                                                         self.queue)
 
     def __on_consumer_cancelled(self, method_frame):
         """Invoked by pika when RabbitMQ sends a Basic.Cancel for a consumer
@@ -204,9 +203,9 @@ class Consumer(object):
                     basic_deliver.delivery_tag,
                     properties.app_id,
                     body)
-        self.__acknowledge_message(basic_deliver.delivery_tag)
+        self.acknowledge_message(basic_deliver.delivery_tag)
 
-    def __acknowledge_message(self, delivery_tag):
+    def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a
         Basic.Ack RPC method for the delivery tag.
 

@@ -5,7 +5,7 @@ EOF
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
-  config.vm.network "forwarded_port", guest: 15672, host: 25672
+  config.vm.network "forwarded_port", guest: 15672, host: 15672
   config.vm.provision :shell, inline: Python_install
   config.vm.provision :ansible,
     playbook: "playbooks/main.yml",
