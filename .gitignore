@@ -1,7 +1,8 @@
 *.pyc
 /.eggs/
 /build/
-AUTHORS
-ChangeLog
-Facade.egg-info/
-build/
+/AUTHORS
+/ChangeLog
+/Facade.egg-info/
+/build/
+/Pika_Consumer.egg-info/
